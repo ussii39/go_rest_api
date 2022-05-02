@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/t0w4/toDoListBackend/db"
+	"github.com/ussii39/go_rest_api/db"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/google/uuid"

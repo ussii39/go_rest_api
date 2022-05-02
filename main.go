@@ -5,10 +5,10 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/t0w4/toDoListBackend/db"
+	"github.com/ussii39/go_rest_api/db"
 
 	"github.com/gorilla/mux"
-	"github.com/t0w4/toDoListBackend/controller"
+	"github.com/ussii39/go_rest_api/controller"
 )
 
 func main() {

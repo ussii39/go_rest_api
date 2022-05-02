@@ -10,7 +10,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/t0w4/toDoListBackend/model"
+	"github.com/ussii39/go_rest_api/model"
 )
 
 func createTasks(quantity int) []*model.Task {

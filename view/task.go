@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/t0w4/toDoListBackend/model"
+	"github.com/ussii39/go_rest_api/model"
 )
 
 type tasksResponse struct {

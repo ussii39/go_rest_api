@@ -8,8 +8,8 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"github.com/t0w4/toDoListBackend/model"
-	"github.com/t0w4/toDoListBackend/view"
+	"github.com/ussii39/go_rest_api/model"
+	"github.com/ussii39/go_rest_api/view"
 )
 
 // TaskController require *sql.Db to initialize

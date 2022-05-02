@@ -1,4 +1,4 @@
-module github.com/t0w4/toDoListBackend
+module github.com/ussii39/go_rest_api
 
 go 1.16
 
