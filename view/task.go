@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/ussii39/go_rest_api/model"
 )
@@ -13,10 +14,23 @@ type tasksResponse struct {
 	Tasks []*model.Task `json:"tasks"`
 }
 
+type Task struct {
+	ID        int       `json:"id"`
+	UUID      string    `json:"uuid"`
+	Title     string    `json:"title"`
+	Detail    string    `json:"detail"`
+	Status    string    `json:"status"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+}
+
+
 func RenderTasks(w http.ResponseWriter, tasks []*model.Task) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.WriteHeader(http.StatusOK)
+	outputJson, err := json.Marshal(tasks)
+	fmt.Print(string(outputJson))
 	s, err := json.Marshal(tasksResponse{Total: len(tasks), Tasks: tasks})
 	if err != nil {
 		RenderInternalServerError(w, "cant't encode tasks response json")

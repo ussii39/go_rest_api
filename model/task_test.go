@@ -94,6 +94,8 @@ func createDatabase(conn *sql.DB) {
 		fmt.Fprintf(os.Stdout, "open file err: %v\n", err)
 		os.Exit(1)
 	}
+	
+	// アプリ終了時にdefer によってClose()処理
 	defer createDbSQL.Close()
 
 	buffer, err := ioutil.ReadAll(createDbSQL)

@@ -1,1 +1,8 @@
 .idea
+
+data
+
+.env
+.air.toml
+.vscode
+tmp

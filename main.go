@@ -5,19 +5,22 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/ussii39/go_rest_api/db"
-
 	"github.com/gorilla/mux"
+	"github.com/joho/godotenv"
 	"github.com/ussii39/go_rest_api/controller"
+	"github.com/ussii39/go_rest_api/db"
 )
 
 func main() {
+	err := godotenv.Load()  // envファイルのパスを渡す。何も渡さないと、どうディレクトリにある、.envファイルを探す
+	if err != nil {
+		panic("Error loading .env file")
+	}
 	dbConn, err := db.Init()
 	if err != nil {
 		log.Printf("db init failed: %v", err)
 		os.Exit(1)
 	}
-
 	tc := &controller.TaskController{dbConn}
 	router := mux.NewRouter()
 	router.HandleFunc("/tasks", tc.CreateTask).Methods(http.MethodPost, http.MethodOptions)

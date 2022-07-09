@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"time"
 
 	"github.com/gorilla/mux"
 	"github.com/ussii39/go_rest_api/model"
@@ -18,14 +19,28 @@ type TaskController struct {
 	Db *sql.DB
 }
 
+type Task struct {
+	ID        int       `json:"id"`
+	UUID      string    `json:"uuid"`
+	Title     string    `json:"title"`
+	Detail    string    `json:"detail"`
+	Status    string    `json:"status"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+}
+
 // GetTasks return All Tasks
+// レシーバーはthisに近い
 func (tc *TaskController) GetTasks(w http.ResponseWriter, r *http.Request) {
-	tasks, err := model.GetTasks(r.Context(), tc.Db)
+	_, err := model.GetTasks(r.Context(), tc.Db)
+	var aaa [] *model.Task
+	aaa = append(aaa, &model.Task{ID: 111, UUID: "testssss",Title:"ressssss",Detail: "a",Status:"a", CreatedAt: time.Now(),UpdatedAt: time.Now()})
+	print(aaa)
 	if err != nil {
 		view.RenderInternalServerError(w, fmt.Sprintf("get tasks error: %v", err))
 		return
 	}
-	view.RenderTasks(w, tasks)
+	view.RenderTasks(w, aaa)
 }
 
 // GetTask は path に含まれる uuid に一致する tasks テーブルの レコードを返す

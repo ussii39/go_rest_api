@@ -2,6 +2,7 @@ package db
 
 import (
 	"database/sql"
+	"fmt"
 	"os"
 	"reflect"
 	"testing"
@@ -40,6 +41,7 @@ func Test_getParamString(t *testing.T) {
 		{name: "get env", args: args{param: "GOPATH", defaultValue: "can't get env"}, want: os.Getenv("GOPATH")},
 		{name: "get default value", args: args{param: "HOGE", defaultValue: "OK"}, want: "OK"},
 	}
+	fmt.Println(tests)
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := getParamString(tt.args.param, tt.args.defaultValue); got != tt.want {

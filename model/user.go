@@ -3,56 +3,53 @@ package model
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"time"
 
 	"github.com/google/uuid"
 )
 
-type Task struct {
+type User struct {
 	ID        int       `json:"id"`
 	UUID      string    `json:"uuid"`
-	Title     string    `json:"title"`
-	Detail    string    `json:"detail"`
-	Status    string    `json:"status"`
-	User_Id   string    `json:"user_id"`
+	Name      string    `json:"name"`
+	Email     string    `json:"email"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
-func GetTasks(ctx context.Context, db *sql.DB) ([]*Task, error) {
-	
+func GetUsers(ctx context.Context, db *sql.DB) ([]*User, error) {
+	fmt.Println(ctx)
 	conn, err := db.Conn(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	var tasks []*Task
+	var Users []*User
 	rows, err := conn.QueryContext(
 		ctx,
 		`
       SELECT 
         id,                               
         uuid, 
-        title, 
-        detail, 
-        status,
+        name,
+		email,
         created_at, 
         updated_at 
-       from tasks`)
+       from users`)
 
 	if err != nil {
 		return nil, err
 	}
 	for rows.Next() {
-		var task Task
+		var User User
 		var createdDatetime string
 		var updateDatetime string
 		err := rows.Scan(
-			&(task.ID),
-			&(task.UUID),
-			&(task.Title),
-			&(task.Detail),
-			&(task.Status),
+			&(User.ID),
+			&(User.UUID),
+			&(User.Name),
+			&(User.Email),
 			&createdDatetime,
 			&updateDatetime)
 
@@ -60,26 +57,26 @@ func GetTasks(ctx context.Context, db *sql.DB) ([]*Task, error) {
 			return nil, err
 		}
 
-		task.CreatedAt, err = time.Parse("2006-01-02 15:04:05", createdDatetime) // 日時はこの日付じゃないといけない
+		User.CreatedAt, err = time.Parse("2006-01-02 15:04:05", createdDatetime) // 日時はこの日付じゃないといけない
 		if err != nil {
 			return nil, err
 		}
-		task.UpdatedAt, err = time.Parse("2006-01-02 15:04:05", updateDatetime) // 日時はこの日付じゃないといけない
+		User.UpdatedAt, err = time.Parse("2006-01-02 15:04:05", updateDatetime) // 日時はこの日付じゃないといけない
 		if err != nil {
 			return nil, err
 		}
-		tasks = append(tasks, &task)
+		Users = append(Users, &User)
 	}
 
-	return tasks, nil
+	return Users, nil
 }
 
-func GetTask(ctx context.Context, db *sql.DB, taskUUID string) (*Task, error) {
+func GetUser(ctx context.Context, db *sql.DB, UserUUID string) (*User, error) {
 	conn, err := db.Conn(ctx)
 	if err != nil {
 		return nil, err
 	}
-	var task Task
+	var User User
 	var createdDatetime string
 	var updateDatetime string
 
@@ -89,21 +86,17 @@ func GetTask(ctx context.Context, db *sql.DB, taskUUID string) (*Task, error) {
       SELECT 
         id,                               
         uuid, 
-        title, 
-        detail, 
-        status,
-		user_id,
+        name,
+		email,
         created_at, 
         updated_at 
-       from tasks
+       from users
        where uuid = ?`,
-		taskUUID).Scan(
-		&(task.ID),
-		&(task.UUID),
-		&(task.Title),
-		&(task.Detail),
-		&(task.Status),
-		&(task.User_Id),
+		UserUUID).Scan(
+		&(User.ID),
+		&(User.UUID),
+		&(User.Name),
+		&(User.Email),
 		&createdDatetime,
 		&updateDatetime,
 	)
@@ -111,19 +104,19 @@ func GetTask(ctx context.Context, db *sql.DB, taskUUID string) (*Task, error) {
 		return nil, err
 	}
 
-	task.CreatedAt, err = time.Parse("2006-01-02 15:04:05", createdDatetime) // 日時はこの日付じゃないといけない
+	User.CreatedAt, err = time.Parse("2006-01-02 15:04:05", createdDatetime) // 日時はこの日付じゃないといけない
 	if err != nil {
 		return nil, err
 	}
-	task.UpdatedAt, err = time.Parse("2006-01-02 15:04:05", updateDatetime) // 日時はこの日付じゃないといけない
+	User.UpdatedAt, err = time.Parse("2006-01-02 15:04:05", updateDatetime) // 日時はこの日付じゃないといけない
 	if err != nil {
 		return nil, err
 	}
 
-	return &task, nil
+	return &User, nil
 }
 
-func CheckTaskExist(ctx context.Context, db *sql.DB, taskUUID string) (bool, error) {
+func CheckUserExist(ctx context.Context, db *sql.DB, UserUUID string) (bool, error) {
 	conn, err := db.Conn(ctx)
 	if err != nil {
 		return false, err
@@ -134,9 +127,9 @@ func CheckTaskExist(ctx context.Context, db *sql.DB, taskUUID string) (bool, err
 		`
       SELECT
        count(*)
-       from tasks
+       from users
        where uuid = ?`,
-		taskUUID).Scan(
+		UserUUID).Scan(
 		&fetchRecordCount,
 	)
 	if err != nil {
@@ -149,27 +142,23 @@ func CheckTaskExist(ctx context.Context, db *sql.DB, taskUUID string) (bool, err
 	return false, nil
 }
 
-func CreateTask(ctx context.Context, db *sql.DB, task *Task) (int64, error) {
+func CreateUser(ctx context.Context, db *sql.DB, User *User) (int64, error) {
 	conn, err := db.Conn(ctx)
 	if err != nil {
 		return 0, err
 	}
 	result, err := conn.ExecContext(
 		ctx,
-		`INSERT INTO tasks (
+		`INSERT INTO users (
                                    uuid, 
-                                   title, 
-                                   detail, 
-                                   status,
-								   user_id,
+                                   name, 
+                                   email, 
                                    created_at,
                                    updated_at
-                                   ) VALUES (?, ?, ?, ?, ?, ?, ?) `,
+                                   ) VALUES (?, ?, ?, ?, ?) `,
 		uuid.New(),
-		task.Title,
-		task.Detail,
-		task.Status,
-		task.User_Id,
+		User.Name,
+		User.Email,
 		time.Now(),
 		time.Now(),
 	)
@@ -183,12 +172,12 @@ func CreateTask(ctx context.Context, db *sql.DB, task *Task) (int64, error) {
 	return lastInsertID, nil
 }
 
-func GetTaskByID(ctx context.Context, db *sql.DB, taskID int64) (*Task, error) {
+func GetUserByID(ctx context.Context, db *sql.DB, UserID int64) (*User, error) {
 	conn, err := db.Conn(ctx)
 	if err != nil {
 		return nil, err
 	}
-	var task Task
+	var User User
 	var createdDatetime string
 	var updateDatetime string
 
@@ -198,21 +187,17 @@ func GetTaskByID(ctx context.Context, db *sql.DB, taskID int64) (*Task, error) {
       SELECT 
         id,                               
         uuid, 
-        title, 
-        detail, 
-        status,
-		user_id,
+        name,
+  	    email,
         created_at, 
         updated_at 
-       from tasks
+       from users
        where id = ?`,
-		taskID).Scan(
-		&(task.ID),
-		&(task.UUID),
-		&(task.Title),
-		&(task.Detail),
-		&(task.Status),
-		&(task.User_Id),
+		UserID).Scan(
+		&(User.ID),
+		&(User.UUID),
+		&(User.Name),
+		&(User.Email),
 		&createdDatetime,
 		&updateDatetime,
 	)
@@ -220,36 +205,34 @@ func GetTaskByID(ctx context.Context, db *sql.DB, taskID int64) (*Task, error) {
 		return nil, err
 	}
 
-	task.CreatedAt, err = time.Parse("2006-01-02 15:04:05", createdDatetime) // 日時はこの日付じゃないといけない
+	User.CreatedAt, err = time.Parse("2006-01-02 15:04:05", createdDatetime) // 日時はこの日付じゃないといけない
 	if err != nil {
 		return nil, err
 	}
-	task.UpdatedAt, err = time.Parse("2006-01-02 15:04:05", updateDatetime) // 日時はこの日付じゃないといけない
+	User.UpdatedAt, err = time.Parse("2006-01-02 15:04:05", updateDatetime) // 日時はこの日付じゃないといけない
 	if err != nil {
 		return nil, err
 	}
 
-	return &task, nil
+	return &User, nil
 }
 
-func UpdateTask(ctx context.Context, db *sql.DB, task *Task, taskUUID string) error {
+func UpdateUser(ctx context.Context, db *sql.DB, User *User, UserUUID string) error {
 	conn, err := db.Conn(ctx)
 	if err != nil {
 		return err
 	}
 	_, err = conn.ExecContext(
 		ctx,
-		`UPDATE tasks 
-                   SET title = ?, 
-                       detail = ?, 
-                       status = ?,
+		`UPDATE users 
+                   SET name = ?, 
+                       email = ?, 
                        updated_at = ?
                  WHERE uuid = ?`,
-		task.Title,
-		task.Detail,
-		task.Status,
+		User.Name,
+		User.Email,
 		time.Now(),
-		taskUUID,
+		UserUUID,
 	)
 	if err != nil {
 		return err
@@ -257,16 +240,16 @@ func UpdateTask(ctx context.Context, db *sql.DB, task *Task, taskUUID string) er
 	return nil
 }
 
-func DeleteTask(ctx context.Context, db *sql.DB, taskUUID string) error {
+func DeleteUser(ctx context.Context, db *sql.DB, UserUUID string) error {
 	conn, err := db.Conn(ctx)
 	if err != nil {
 		return err
 	}
 	_, err = conn.ExecContext(
 		ctx,
-		`DELETE FROM tasks 
+		`DELETE FROM users 
                  WHERE uuid = ?`,
-		taskUUID,
+		UserUUID,
 	)
 	if err != nil {
 		return err

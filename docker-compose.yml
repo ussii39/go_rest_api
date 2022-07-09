@@ -1,23 +1,23 @@
-version: '3'
+version: "3"
 services:
   db:
-    platform: linux/x86_64 
-    image: mysql:8.0
-    container_name: db  # 追加!!
+    build: ./db
+    platform: linux/x86_64
+    container_name: db
     volumes:
-      - mysql_data:/var/lib/mysql
+      - ./db/data:/var/lib/mysql
       - ./sqls/init:/docker-entrypoint-initdb.d
     expose:
       - "3306"
-    restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: gerhuhaer
-      MYSQL_DATABASE: todoList
-      MYSQL_USER: t0w4
-      MYSQL_PASSWORD: faweufhli
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DB: todoList
+      MYSQL_PORT: 3306
+      MYSQL_USER: dbuser
+      MYSQL_PASSWORD: testUser
 
   todolist:
-    platform: linux/x86_64 
+    platform: linux/x86_64
     build: .
     depends_on:
       - db
@@ -27,9 +27,8 @@ services:
       MYSQL_DB_HOST: db
       MYSQL_DB: todoList
       MYSQL_PORT: 3306
-      MYSQL_USER: t0w4
-      MYSQL_PASSWORD: faweufhli
-    restart: always
+      MYSQL_USER: dbuser
+      MYSQL_PASSWORD: testUser
 
 volumes:
   mysql_data:
