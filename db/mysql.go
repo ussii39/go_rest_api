@@ -20,8 +20,8 @@ func Init() (*sql.DB, error) {
 	// fmt.Println(db2)
 	// fmt.Println(err2)
 	db.SetMaxOpenConns(25)
-    db.SetMaxIdleConns(25)
-    db.SetConnMaxLifetime(5*time.Minute)
+	db.SetMaxIdleConns(25)
+	db.SetConnMaxLifetime(5 * time.Minute)
 
 	if err != nil {
 		return nil, err
@@ -40,19 +40,25 @@ func getParamString(param string, defaultValue string) string {
 func getConnectionString() string {
 	print(os.Getenv("APP_ENV"))
 	print(os.Getenv("ENV"))
- 	host := getParamString("MYSQL_DB_HOST", "db")
+	// local環境では127.0.0.1
+	// host := getParamString("MYSQL_DB_HOST", "127.0.0.1")
+	// 本番環境では127.0.0.1
+	host := getParamString("MYSQL_DB_HOST", "db")
 	port := getParamString("MYSQL_PORT", "3306")
-	user := getParamString("MYSQL_USER", "dbuser")
-	pass := getParamString("MYSQL_PASSWORD", "testUser")
+	user := getParamString("MYSQL_USER", "root")
+	// local環境では
+	// pass := getParamString("MYSQL_PASSWORD", "")
+	// 本番環境では
+	pass := getParamString("MYSQL_PASSWORD", "password")
 	dbname := getParamString("MYSQL_DB", "todoList")
 	protocol := os.Getenv("MYSQL_PROTOCOL")
 
 	if os.Getenv("ENV") == "local" {
-	host =os.Getenv("MYSQL_DB_HOST")
-	port = os.Getenv("MYSQL_PORT")
-	user = os.Getenv("MYSQL_USER")
-	pass = os.Getenv("MYSQL_PASSWORD")
-	dbname = os.Getenv("MYSQL_DB")
+		host = os.Getenv("MYSQL_DB_HOST")
+		port = os.Getenv("MYSQL_PORT")
+		user = os.Getenv("MYSQL_USER")
+		pass = os.Getenv("MYSQL_PASSWORD")
+		dbname = os.Getenv("MYSQL_DB")
 	}
 
 	if os.Getenv("APP_ENV") == "test" {
@@ -66,7 +72,7 @@ func getConnectionString() string {
 	} else {
 		dbargs = ""
 	}
-	fmt.Println(user, pass, protocol, host, port, dbname, dbargs,"aaaaa")
+	fmt.Println(user, pass, protocol, host, port, dbname, dbargs, "bbbb")
 	return fmt.Sprintf("%s:%s@%s([%s]:%s)/%s%s",
 		user, pass, protocol, host, port, dbname, dbargs)
 }

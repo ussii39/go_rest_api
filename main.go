@@ -12,22 +12,29 @@ import (
 )
 
 func main() {
-	err := godotenv.Load()  // envファイルのパスを渡す。何も渡さないと、どうディレクトリにある、.envファイルを探す
-	if err != nil {
-		panic("Error loading .env file")
+	if os.Getenv("ENV") == "local" {
+		err := godotenv.Load() // envファイルのパスを渡す。何も渡さないと、どうディレクトリにある、.envファイルを探す
+		if err != nil {
+			panic("Error loading .env file")
+		}
 	}
+
 	dbConn, err := db.Init()
 	if err != nil {
 		log.Printf("db init failed: %v", err)
 		os.Exit(1)
 	}
 	tc := &controller.TaskController{dbConn}
+	tc2 := &controller.HouseholdController{dbConn}
+
 	router := mux.NewRouter()
 	router.HandleFunc("/tasks", tc.CreateTask).Methods(http.MethodPost, http.MethodOptions)
 	router.HandleFunc("/tasks", tc.GetTasks).Methods(http.MethodGet)
+	router.HandleFunc("/houseHold", tc2.CreateHousehold).Methods(http.MethodPost, http.MethodOptions)
+	router.HandleFunc("/houseHold", tc2.GetHouseholds).Methods(http.MethodGet)
 	router.HandleFunc("/tasks/{uuid}", tc.GetTask).Methods(http.MethodGet)
 	router.HandleFunc("/tasks/{uuid}", tc.PutTask).Methods(http.MethodPut)
 	router.HandleFunc("/tasks/{uuid}", tc.DeleteTask).Methods(http.MethodDelete, http.MethodOptions)
-	log.Print(http.ListenAndServe("0.0.0.0:8080", router))
+	log.Print(http.ListenAndServe("0.0.0.0:80", router))
 	os.Exit(1)
 }

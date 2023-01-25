@@ -32,15 +32,15 @@ type Task struct {
 // GetTasks return All Tasks
 // レシーバーはthisに近い
 func (tc *TaskController) GetTasks(w http.ResponseWriter, r *http.Request) {
-	_, err := model.GetTasks(r.Context(), tc.Db)
+	task, err := model.GetTasks(r.Context(), tc.Db)
 	var aaa [] *model.Task
-	aaa = append(aaa, &model.Task{ID: 111, UUID: "testssss",Title:"ressssss",Detail: "a",Status:"a", CreatedAt: time.Now(),UpdatedAt: time.Now()})
+	aaa = append(aaa, &model.Task{ID: 111, UUID: "testssss",Title:"ressssss",Detail: "a",Status:"a", User_Id: 1, CreatedAt: time.Now(),UpdatedAt: time.Now()})
 	print(aaa)
 	if err != nil {
 		view.RenderInternalServerError(w, fmt.Sprintf("get tasks error: %v", err))
 		return
 	}
-	view.RenderTasks(w, aaa)
+	view.RenderTasks(w, task)
 }
 
 // GetTask は path に含まれる uuid に一致する tasks テーブルの レコードを返す

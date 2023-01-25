@@ -1,1 +1,1 @@
-TRUNCATE TABLE `todoList`.`tasks`;
+TRUNCATE TABLE `todoList_test`.`tasks`;

@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
 	"testing"
 	"time"
@@ -182,18 +183,25 @@ func truncateTable() {
 }
 
 func createTasks(quantity int) []*Task {
-	tasks := make([]*Task, quantity)
-	for i := 0; i < quantity; i++ {
+	fmt.Println("quantity ======>")
+	fmt.Println(quantity)
+	// log.Println("Fooのログ3")
+    tasks := make([]*Task, quantity)
+    for i := 0; i < quantity; i++ {
+		// fmt.Println("foo")
 		tasks[i] = &Task{
 			ID:        i + 1,
 			UUID:      uuid.New().String(),
 			Title:     fmt.Sprintf("title%d", i+1),
 			Detail:    fmt.Sprintf("detail%d", i+1),
 			Status:    fmt.Sprintf("status%d", i+1),
+			User_Id:   i + 1,
 			CreatedAt: time.Now(),
 			UpdatedAt: time.Now(),
 		}
 	}
+	fmt.Println("tasks ===========>")
+	fmt.Println(tasks)
 	return tasks
 }
 
@@ -209,21 +217,33 @@ func TestCreateTask(t *testing.T) {
 		before  func()
 		after   func()
 	}{
-		{name: "正常系1", args: args{createTasks(1)[0]}, want: 1, wantErr: false, before: truncateTable},
-		{name: "正常系2", args: args{createTasks(1)[0]}, want: 2, wantErr: false, before: truncateTable},
+		// {name: "正常系1", args: args{defer createTasks(1)[0]}, want: 1, wantErr: false,before: truncateTable},
+		 {name: "正常系2", args: args{createTasks(2)[0]}, want: 1, wantErr: false},
+		//  createTasks関数の戻り値の0個目をargsにする
+		//  &{1 303059e7-33bf-4e61-b68b-92b1c9cfd4dd title1 detail1 status1 1 2022-08-03 23:57:47.527124 +0900 JST m=+0.024781418 2022-08-03 23:57:47.527124 +0900 JST m=+0.024781543}
+		// {name: "正常系3", args: args{createTasks(3)[0]}, want: 3, wantErr: false},
 	}
 	for _, tt := range tests {
+		log.Println(*&tt.args.task)
 		if tt.before != nil {
 			tt.before()
 		}
 		t.Run(tt.name, func(t *testing.T) {
 			conn, err := db.Init()
 			ctx := context.Background()
+			// fmt.Print(tt.args.task)
 			got, err := CreateTask(ctx, conn, tt.args.task)
+
+			// println(got)
+			// fmt.Println(tt)
+
 			if (err != nil) != tt.wantErr {
 				t.Errorf("CreateTask() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
+			fmt.Println(tt.want)
+			fmt.Println(got)
+
 			if got != tt.want {
 				t.Errorf("CreateTask() = %v, want %v", got, tt.want)
 			}

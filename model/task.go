@@ -14,7 +14,7 @@ type Task struct {
 	Title     string    `json:"title"`
 	Detail    string    `json:"detail"`
 	Status    string    `json:"status"`
-	User_Id   string    `json:"user_id"`
+	User_Id   int    `json:"user_id"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 }
@@ -36,6 +36,7 @@ func GetTasks(ctx context.Context, db *sql.DB) ([]*Task, error) {
         title, 
         detail, 
         status,
+		user_id,
         created_at, 
         updated_at 
        from tasks`)
@@ -53,6 +54,7 @@ func GetTasks(ctx context.Context, db *sql.DB) ([]*Task, error) {
 			&(task.Title),
 			&(task.Detail),
 			&(task.Status),
+			&(task.User_Id),
 			&createdDatetime,
 			&updateDatetime)
 
@@ -68,6 +70,8 @@ func GetTasks(ctx context.Context, db *sql.DB) ([]*Task, error) {
 		if err != nil {
 			return nil, err
 		}
+		// &でtaskを変数からポインター変更にしている
+		// ポインターにすることで
 		tasks = append(tasks, &task)
 	}
 
