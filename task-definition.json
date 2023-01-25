@@ -1,9 +1,9 @@
 {
-  "taskDefinitionArn": "arn:aws:ecs:ap-northeast-1:SED_TARGET_AWS_ACCOUNT_ID::task-definition/go_api:5",
+  "taskDefinitionArn": "arn:aws:ecs:ap-northeast-1:SED_TARGET_AWS_ACCOUNT_ID:task-definition/go_api:5",
   "containerDefinitions": [
     {
       "name": "go",
-      "image": "SED_TARGET_AWS_ACCOUNT_ID:.dkr.ecr.ap-northeast-1.amazonaws.com/go_api:latest",
+      "image": "SED_TARGET_AWS_ACCOUNT_ID.dkr.ecr.ap-northeast-1.amazonaws.com/go_api:latest",
       "cpu": 0,
       "portMappings": [
         {
@@ -31,7 +31,7 @@
     },
     {
       "name": "mysql",
-      "image": "SED_TARGET_AWS_ACCOUNT_ID:.dkr.ecr.ap-northeast-1.amazonaws.com/mysql:latest",
+      "image": "SED_TARGET_AWS_ACCOUNT_ID.dkr.ecr.ap-northeast-1.amazonaws.com/mysql:latest",
       "cpu": 0,
       "portMappings": [],
       "essential": true,
@@ -80,8 +80,8 @@
     }
   ],
   "family": "go_api",
-  "taskRoleArn": "arn:aws:iam::SED_TARGET_AWS_ACCOUNT_ID::role/ecsTaskExecutionRole",
-  "executionRoleArn": "arn:aws:iam::SED_TARGET_AWS_ACCOUNT_ID::role/ecsTaskExecutionRole",
+  "taskRoleArn": "arn:aws:iam::SED_TARGET_AWS_ACCOUNT_ID:role/ecsTaskExecutionRole",
+  "executionRoleArn": "arn:aws:iam::SED_TARGET_AWS_ACCOUNT_ID:role/ecsTaskExecutionRole",
   "networkMode": "awsvpc",
   "revision": 5,
   "volumes": [],
@@ -125,7 +125,7 @@
     "operatingSystemFamily": "LINUX"
   },
   "registeredAt": "2023-01-22T05:08:22.473Z",
-  "registeredBy": "arn:aws:iam::SED_TARGET_AWS_ACCOUNT_ID::root",
+  "registeredBy": "arn:aws:iam::SED_TARGET_AWS_ACCOUNT_ID:root",
   "tags": [
     {
       "key": "ecs:taskDefinition:createdFrom",
