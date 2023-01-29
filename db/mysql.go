@@ -43,7 +43,7 @@ func getConnectionString() string {
 	// local環境では127.0.0.1
 	// host := getParamString("MYSQL_DB_HOST", "127.0.0.1")
 	// 本番環境では127.0.0.1
-	host := getParamString("MYSQL_DB_HOST", "db")
+	host := getParamString("MYSQL_DB_HOST", "127.0.0.1")
 	port := getParamString("MYSQL_PORT", "3306")
 	user := getParamString("MYSQL_USER", "dbUser")
 	// local環境では
