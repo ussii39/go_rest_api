@@ -16,6 +16,7 @@ jobs:
           chmod 600 go_api.pem
 
       - name: Get PID
+        id: get_pid
         run: |
           ssh -i go_api.pem -o StrictHostKeyChecking=no ec2-user@35.78.80.222 'cd ./go_rest_api && ps aux | grep main' > pid.txt
           PID=$(awk '{print $2}' pid.txt)
@@ -23,7 +24,6 @@ jobs:
           echo "::set-output name=pid::$PID"
 
       - name: Stop the application
-        if: ${{ success() && steps.get_pid.outputs.pid != null }}
         run: |
           ssh -i go_api.pem -o StrictHostKeyChecking=no ec2-user@35.78.80.222 'cd ./go_rest_api && sudo kill $${{ steps.get_pid.outputs.pid }}'
 
