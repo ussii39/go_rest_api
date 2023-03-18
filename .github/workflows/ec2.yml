@@ -19,7 +19,7 @@ jobs:
       - name: Deploy to EC2
         env:
           PRIVATE_KEY: ${{ secrets.GO_API_PEM_KEY }}
-          HOST: 172.31.15.188 # GitHub SecretsからEC2インスタンスのIPアドレスを取得
+          HOST: 35.78.80.222 # GitHub SecretsからEC2インスタンスのIPアドレスを取得
           USER: ec2-user # GitHub SecretsからEC2インスタンスのユーザー名を取得
         run: |
           scp -i private_key.pem -o StrictHostKeyChecking=no -r . ec2-user@172.31.15.188:/go_rest_api
