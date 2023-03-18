@@ -22,5 +22,5 @@ jobs:
           HOST: 35.78.80.222 # GitHub SecretsからEC2インスタンスのIPアドレスを取得
           USER: ec2-user # GitHub SecretsからEC2インスタンスのユーザー名を取得
         run: |
-          scp -i private_key.pem -o StrictHostKeyChecking=no -r . ec2-user@172.31.15.188:/go_rest_api
-          ssh -i private_key.pem -o StrictHostKeyChecking=no ec2-user@172.31.15.188 'cd /go_rest_api && sudo go run main.go'
+          scp -i private_key.pem -o StrictHostKeyChecking=no -r . ec2-user@35.78.80.222:/go_rest_api
+          ssh -i private_key.pem -o StrictHostKeyChecking=no ec2-user@35.78.80.222 'cd /go_rest_api && sudo go run main.go'
