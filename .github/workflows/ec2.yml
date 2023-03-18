@@ -16,11 +16,12 @@ jobs:
           echo "${{ secrets.GO_API_PEM_KEY }}" > go_api.pem
           chmod 600 go_api.pem
 
-     - name: Get PID
-       run: |
-         ssh myec2 "cd ./go_rest_api && ps aux | grep main" > pid.txt
-         PID=$(awk '{print $2}' pid.txt)
-         echo "PID=$PID"
+      - name: Get PID
+        run: |
+          ssh myec2 "cd ./go_rest_api && ps aux | grep main" > pid.txt
+          PID=$(awk '{print $2}' pid.txt)
+          echo "PID=$PID"
+
       - name: Stop the application
         if: ${{ env.PID != null }}
         run: |
