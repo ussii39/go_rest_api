@@ -50,9 +50,9 @@ func getConnectionString() string {
 	// user := getParamString("MYSQL_USER", "root")
 	user := getParamString("MYSQL_USER", "dbUser")
 	// local環境では
-	// pass := getParamString("MYSQL_PASSWORD", "")
+	pass := getParamString("MYSQL_PASSWORD", "")
 	// 本番環境では
-	pass := getParamString("MYSQL_PASSWORD", "tetunori3")
+	// pass := getParamString("MYSQL_PASSWORD", "tetunori3")
 	dbname := getParamString("MYSQL_DB", "todoList")
 	protocol := os.Getenv("MYSQL_PROTOCOL")
 
