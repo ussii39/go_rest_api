@@ -23,7 +23,7 @@ jobs:
           echo "PID=$PID"
 
       - name: Stop the application
-        if: ${{ env.PID != null }}
+        if: ${{ success() && env.PID != null }}
         run: |
           ssh -i go_api.pem -o StrictHostKeyChecking=no ec2-user@35.78.80.222 'cd ./go_rest_api && sudo kill $PID'
 
