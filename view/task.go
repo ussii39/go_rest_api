@@ -24,19 +24,20 @@ type Task struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
-
 func RenderTasks(w http.ResponseWriter, tasks []*model.Task) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.WriteHeader(http.StatusOK)
-	outputJson, err := json.Marshal(tasks)
-	fmt.Print(string(outputJson))
+	// outputJson, err := json.Marshal(tasks)
+	// fmt.Print(string(outputJson))
 	s, err := json.Marshal(tasksResponse{Total: len(tasks), Tasks: tasks})
 	if err != nil {
 		RenderInternalServerError(w, "cant't encode tasks response json")
 		return
 	}
-	fmt.Fprintln(w, string(s))
+	// json.NewEncoder(w).Encode(s)
+	// fmt.Fprintln(w, string(s))
+	w.Write(s)
 }
 
 func RenderTask(w http.ResponseWriter, task *model.Task, statusCode int) {
