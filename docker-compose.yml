@@ -22,8 +22,8 @@ services:
     depends_on:
       - db
     # airを使う場合は有効にする
-    # volumes:
-    #   - .:/app
+    volumes:
+      - .:/app
     ports:
       - "80:80"
     environment:
