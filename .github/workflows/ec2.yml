@@ -18,14 +18,14 @@ jobs:
 
       - name: Get PID
         run: |
-          ssh myec2 "cd ./go_rest_api && ps aux | grep main" > pid.txt
+          ssh -i go_api.pem -o StrictHostKeyChecking=no ec2-user@35.78.80.222 'cd ./go_rest_api && ps aux | grep main' > pid.txt
           PID=$(awk '{print $2}' pid.txt)
           echo "PID=$PID"
 
       - name: Stop the application
         if: ${{ env.PID != null }}
         run: |
-          ssh myec2 "cd ./go_rest_api && sudo kill $PID"
+          ssh -i go_api.pem -o StrictHostKeyChecking=no ec2-user@35.78.80.222 'cd ./go_rest_api && sudo kill $PID'
 
       - name: Deploy to EC2
         env:
