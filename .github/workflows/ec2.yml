@@ -24,9 +24,9 @@ jobs:
           echo "::set-output name=pid::$PID"
 
       - name: Stop the application
-        if: ${{ success() && env.PID != null }}
+        if: ${{ success() && steps.get_pid.outputs.pid != null }}
         run: |
-          ssh -i go_api.pem -o StrictHostKeyChecking=no ec2-user@35.78.80.222 'cd ./go_rest_api && sudo kill -f $${{ steps.get_pid.outputs.pid }}'
+          ssh -i go_api.pem -o StrictHostKeyChecking=no ec2-user@35.78.80.222 'cd ./go_rest_api && sudo kill -f ${{ steps.get_pid.outputs.pid }}'
 
       - name: Deploy to EC2
         env:
