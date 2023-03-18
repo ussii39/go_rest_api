@@ -23,5 +23,5 @@ jobs:
           USER: ec2-user # GitHub SecretsからEC2インスタンスのユーザー名を取得
         run: |
 
-          scp -i go_api.pem -o StrictHostKeyChecking=no -r ./go_api ec2-user@35.78.80.222:/go_rest_api
+          scp -i go_api.pem -o StrictHostKeyChecking=no -r go_rest_api ec2-user@35.78.80.222:/go_rest_api
           ssh -i go_api.pem -o StrictHostKeyChecking=no ec2-user@35.78.80.222 'cd ./go_rest_api && sudo go run main.go'
