@@ -36,4 +36,5 @@ jobs:
         run: |
 
           scp -i go_api.pem -o StrictHostKeyChecking=no -r ./* ec2-user@35.78.80.222:./go_rest_api
-          ssh -i go_api.pem -o StrictHostKeyChecking=no ec2-user@35.78.80.222 'cd ./go_rest_api && sudo nohup go run main.go > /dev/null 2>&1 &'
+          # ssh -i go_api.pem -o StrictHostKeyChecking=no ec2-user@35.78.80.222 'cd ./go_rest_api && sudo nohup go run main.go > /dev/null 2>&1 &'
+          ssh -i go_api.pem -o StrictHostKeyChecking=no ec2-user@35.78.80.222 'cd ./go_rest_api && nohup sudo bash -c "go run main.go > /dev/null 2>&1 &"'
