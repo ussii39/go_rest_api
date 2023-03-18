@@ -36,6 +36,6 @@ func main() {
 	router.HandleFunc("/tasks/{uuid}", tc.PutTask).Methods(http.MethodPut)
 	router.HandleFunc("/tasks/{uuid}", tc.DeleteTask).Methods(http.MethodDelete, http.MethodOptions)
 	log.Print(http.ListenAndServe("0.0.0.0:80", router))
-	// print("aaaaaaaaaaaaaaa")
+	print("bbbbbbbbbbbbbbbb")
 	os.Exit(1)
 }
