@@ -18,7 +18,11 @@ jobs:
       - name: Get PID
         id: get_pid
         run: |
+<<<<<<< HEAD
           ssh -i go_api.pem -o StrictHostKeyChecking=no ec2-user@35.78.80.222 'sudo lsof -t -i:80 > pid.txt'
+=======
+          ssh -i go_api.pem -o StrictHostKeyChecking=no ec2-user@35.78.80.222 'sudo lsof -t -i:80' > pid.txt
+>>>>>>> 2c9e9c17f096c9ed41750bb5e6792971ce3f0f04
           PID=$(awk '{print $2}' pid.txt)
           echo "PID=$PID"
           echo "::set-output name=pid::$PID"
