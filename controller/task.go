@@ -33,9 +33,9 @@ type Task struct {
 // レシーバーはthisに近い
 func (tc *TaskController) GetTasks(w http.ResponseWriter, r *http.Request) {
 	task, err := model.GetTasks(r.Context(), tc.Db)
-	var aaa [] *model.Task
-	aaa = append(aaa, &model.Task{ID: 111, UUID: "testssss",Title:"ressssss",Detail: "a",Status:"a", User_Id: 1, CreatedAt: time.Now(),UpdatedAt: time.Now()})
-	print(aaa)
+	// var aaa []*model.Task
+	// aaa = append(aaa, &model.Task{ID: 111, UUID: "testssss", Title: "ressssss", Detail: "a", Status: "a", User_Id: 1, CreatedAt: time.Now(), UpdatedAt: time.Now()})
+	// print(aaa)
 	if err != nil {
 		view.RenderInternalServerError(w, fmt.Sprintf("get tasks error: %v", err))
 		return
