@@ -13,14 +13,14 @@ jobs:
 
       - name: Set up SSH
         run: |
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key.pem
+          echo "${{ secrets.GO_API_PEM_KEY }}" > private_key.pem
           chmod 600 private_key.pem
 
       - name: Deploy to EC2
         env:
-          PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          HOST: ${{ secrets.HOST }} # GitHub SecretsからEC2インスタンスのIPアドレスを取得
-          USER: ${{ secrets.USER }} # GitHub SecretsからEC2インスタンスのユーザー名を取得
+          PRIVATE_KEY: ${{ secrets.GO_API_PEM_KEY }}
+          HOST: 172.31.15.188 # GitHub SecretsからEC2インスタンスのIPアドレスを取得
+          USER: ec2-user # GitHub SecretsからEC2インスタンスのユーザー名を取得
         run: |
-          scp -i private_key.pem -o StrictHostKeyChecking=no -r . ${{ secrets.USER }}@${{ secrets.HOST }}:/path/to/your/app/on/ec2
-          ssh -i private_key.pem -o StrictHostKeyChecking=no ${{ secrets.USER }}@${{ secrets.HOST }} 'cd /path/to/your/app/on/ec2 && your-deploy-commands'
+          scp -i private_key.pem -o StrictHostKeyChecking=no -r . ec2-user@172.31.15.188:/go_rest_api
+          ssh -i private_key.pem -o StrictHostKeyChecking=no ec2-user@172.31.15.188 'cd /go_rest_api && sudo go run main.go'
