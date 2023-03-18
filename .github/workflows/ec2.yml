@@ -1,0 +1,26 @@
+on:
+  push:
+    branches:
+      - main # mainブランチにプッシュされたときにデプロイが実行されます
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up SSH
+        run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key.pem
+          chmod 600 private_key.pem
+
+      - name: Deploy to EC2
+        env:
+          PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          HOST: ${{ secrets.HOST }} # GitHub SecretsからEC2インスタンスのIPアドレスを取得
+          USER: ${{ secrets.USER }} # GitHub SecretsからEC2インスタンスのユーザー名を取得
+        run: |
+          scp -i private_key.pem -o StrictHostKeyChecking=no -r . ${{ secrets.USER }}@${{ secrets.HOST }}:/path/to/your/app/on/ec2
+          ssh -i private_key.pem -o StrictHostKeyChecking=no ${{ secrets.USER }}@${{ secrets.HOST }} 'cd /path/to/your/app/on/ec2 && your-deploy-commands'
